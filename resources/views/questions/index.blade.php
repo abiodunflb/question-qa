@@ -8,10 +8,30 @@
                 <div class="card-header">{{ __('All Questions') }}</div>
 
                 <div class="card-body">
+                    {{$questions->links()}}
                     @forelse($questions as $question)
                     <div class="media">
+                            <div class="d-flex flex-column counters">
+                                <div class="vote">
+                                    <strong>{{$question->votes}}</strong> {{Str::plural('vote', $question->votes)}}
+                                </div>
+
+                                <div class="status">
+                                    <strong>{{$question->answers}}</strong> {{Str::plural('answer', $question->answers)}}
+                                </div>
+
+                                <div class="view">
+                                    {{$question->views . " " . Str::plural('view', $question->votes)}}
+                                </div>
+                            </div>
                         <div class="media-body">
-                        <h3 class="mt-0">{{$question->title}}</h3>
+                            
+                        <h3 class="mt-0"><a href="{{$question->url}}">{{$question->title}}</a></h3>
+                        <p class="lead">
+                        Asked By <a href="{{$question->user->url}}">{{$question->user->name}}</a>
+                        <small class="text-muted">{{$question->created_date}}</small>
+                        </p>
+                        
                         {{Str::limit($question->body, 250)}}
                         </div>
                     </div>
