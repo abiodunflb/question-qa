@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Question;
 use Illuminate\Http\Request;
-
+use Auth;
 class QuestionController extends Controller
 {
     /**
@@ -25,7 +25,7 @@ class QuestionController extends Controller
      */
     public function create()
     {
-        //
+        return view('questions.create');
     }
 
     /**
@@ -36,7 +36,17 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'title' => 'required',
+            'body' => 'required'
+        ]);
+        $question = new Question();
+        $question->title = $request->input('title');
+        $question->body = $request->input('body');
+        $question->user_id = auth()->user()->id;
+        $question->save();
+
+        return redirect()->route('questions.index')->with('success', 'Question Added');
     }
 
     /**
@@ -47,7 +57,7 @@ class QuestionController extends Controller
      */
     public function show(Question $question)
     {
-        //
+        return view('questions.show', compact('question'));
     }
 
     /**
@@ -58,7 +68,12 @@ class QuestionController extends Controller
      */
     public function edit(Question $question)
     {
-        //
+        if(\Gate::denies('update-question', $question)){
+            return redirect()->route('questions.index')->with('err', 'Unauthourized');
+        }
+
+        return view('questions.edit', compact('question'));
+        
     }
 
     /**
@@ -70,7 +85,23 @@ class QuestionController extends Controller
      */
     public function update(Request $request, Question $question)
     {
-        //
+        // if(\Gate::denies('update-question', $question)){
+        //     return redirect()->route('questions.index')->with('err', 'Unauthourized');
+        // }
+
+        if(Auth::user()->id !== $question->user_id){
+            return redirect()->route('questions.index')->with('err', 'Unauthourized');
+        }
+        $this->validate($request, [
+            'title' => 'required',
+            'body'  => 'required'
+        ]);
+
+        $question->title = $request->title;
+        $question->body = $request->body;
+        $question->save();
+
+        return redirect()->route('questions.index')->with('success', 'Question Updated');
     }
 
     /**
@@ -81,6 +112,14 @@ class QuestionController extends Controller
      */
     public function destroy(Question $question)
     {
-        //
+        // if(\Gate::denies('delete-question', $question)){
+        //     return redirect()->route('questions.index')->with('err', 'Unauthourized');
+        // }
+
+        if(Auth::user()->id !== $question->user_id){
+            return redirect()->route('questions.index')->with('err', 'Unauthourized');
+        }
+        $question->delete();
+        return redirect()->route('questions.index')->with('delete', 'Question removed');
     }
 }

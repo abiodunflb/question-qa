@@ -19,10 +19,25 @@ class Question extends Model
     }
 
     public function getUrlAttribute(){
-        return route('questions.show', $this->id);
+        return route('questions.show', $this->slug);
     }
 
     public function getCreatedDateAttribute(){
         return $this->created_at->diffForHumans();
+    }
+
+    public function getStatusAttribute(){
+        if($this->answers_count > 0){
+            if($this->best_answer_id){
+                return "best_answer";
+            }
+            return "answered";
+        } else{
+            return "unanswered";
+        }
+    }
+
+    public function answers(){
+        return $this->hasMany(Answer::class);
     }
 }

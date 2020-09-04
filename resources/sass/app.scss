@@ -23,4 +23,26 @@
         height: 60px;
 
     }
+
+    .status {
+        &.unanswered {
+            border: none;
+        }
+
+        &.answered {
+            border: 1px solid $green;
+            color: $green;
+        }
+
+        &.best_answer {
+            background: $green;
+            color: #fff;
+        }
+    }
+
+
+}
+
+form.form-delete {
+    display: inline-block;
 }
