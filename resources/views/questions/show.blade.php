@@ -17,11 +17,16 @@
                 </div>
                 <div class="media">
                     <div class="d-flex flex-column vote-controls">
-                        <a title="This is a useful question" class="vote-up">Vote Up</a>
+                        <a title="This is a useful question" class="vote-up">
+                            <i class="fas fa-caret-up fa-3x"></i>
+                        </a>
                         <span class="votes-count">123</span>
-                        <a title="This is not a useful question" class="vote-down off">Vote Down</a>
-                        <a title="click to mark as favourite (click to undo)" class="favourite">
-                            favourite
+                        
+                        <a title="This is not a useful question" class="vote-down off">
+                            <i class="fas fa-caret-down fa-3x"></i>
+                        </a>
+                        <a title="click to mark as favourite (click to undo)" class="favourite favourited ">
+                            <i class="fas fa-star fa-2x"></i>
                             <span class="favourites-count">123</span>
                         </a>
                     </div>
@@ -59,8 +64,22 @@
                     <hr>
                     @forelse($question->answers as $answer)
                     <div class="media">
-
+                        <div class="d-flex flex-column vote-controls">
+                        <a title="This is a useful answer" class="vote-up">
+                            <i class="fas fa-caret-up fa-3x"></i>
+                        </a>
+                        <span class="votes-count">123</span>
+                        
+                        <a title="This is not a useful answer" class="vote-down off">
+                            <i class="fas fa-caret-down fa-3x"></i>
+                        </a>
+                        <a title="Mark as right answer" class="vote-accept vote-accepted">
+                            <i class="fas fa-check fa-2x"></i>
+                            
+                        </a>
+                    </div>
                         <div class="media-body">
+                            
                             {{$answer->body}}
                             <div class="d-flex float-right mt-3">
                                 <div class="media">
